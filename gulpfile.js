@@ -1,15 +1,14 @@
 const gulp = require('gulp')
 const $ = require('shelljs')
 
-const GITHUB_TOKEN = process.env['GITHUB_TOKEN']
 const BRANCH = process.env['BUILD_SOURCEBRANCHNAME']
 
-if (!GITHUB_TOKEN) {
+if (!process.env['GITHUB_TOKEN']) {
   $.echo('This script clones vscode-website and requires access token')
   $.exit(1)
 }
 
-const URL = `https://${GITHUB_TOKEN}@github.com/microsoft/vscode-website`
+const URL = `https://${process.env['GITHUB_TOKEN']}@github.com/microsoft/vscode-website`
 
 /**
  * This task
@@ -47,7 +46,7 @@ gulp.task('build-dist', done => {
   $.cd('vscode-website')
   // Run setup to fetch vscode-website-dist
   $.echo('BRANCH is ' + BRANCH)
-  const setup = $.exec(`scripts/setup.sh ${GITHUB_TOKEN} ${BRANCH}`)
+  const setup = $.exec(`scripts/setup.sh ${process.env['GITHUB_TOKEN']} ${BRANCH}`)
   if (setup.code !== 0) {
     console.log('Failed to setup')
     done(setup.stderr)
